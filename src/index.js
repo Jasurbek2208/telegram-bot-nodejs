@@ -9,7 +9,7 @@ const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 bot.start((ctx) => {
   // Using a more readable multiline array for the keyboard options
   const keyboard = Markup.keyboard([
-    ["👋 Say Hello", "⚠️ Help!"],
+    ["👋 Say Hello", "⚠️ Help"],
     ["🔗 Bot Commands"],
   ]).resize();
 
@@ -24,7 +24,7 @@ bot.on("text", async (ctx) => {
       await replyToUser(ctx, "Hello there!");
       break;
 
-    case "⚠️ Help!":
+    case "⚠️ Help":
       await replyToUser(ctx, "Helping !");
       break;
 
@@ -36,7 +36,7 @@ bot.on("text", async (ctx) => {
         // await replyToUser(ctx, userMessage);
         await openai.getChatToGPT(ctx, userMessage, user)
       } catch (error) {
-        await replyToUser(ctx, `Error in sending text: \n${error}`);
+        await replyToUser(ctx, `Error in sending text:\n${error}`);
       }
       break;
   }
