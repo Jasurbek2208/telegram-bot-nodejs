@@ -32,7 +32,8 @@ bot.on("text", async (ctx) => {
       try {
         // Get the user ID as the user identifier
         const user = ctx.message.from.id;
-        await openai.getChatToGPT(ctx, userMessage, user)
+        await replyToUser(ctx, userMessage);
+        // await openai.getChatToGPT(ctx, userMessage, user)
       } catch (error) {
         await replyToUser(ctx, `Error in sending text: \n${error}`);
       }
