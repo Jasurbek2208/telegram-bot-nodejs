@@ -1,12 +1,10 @@
 const { Telegraf, Markup } = require("telegraf");
-require('dotenv').config();
 // const config = require("config");
-// const { openai } = require("./openai")
+const { openai } = require("./openai")
 const { replyToUser, postPortfolioToServer } = require("./utils/functions");
 
-// const botToken = config.get("TELEGRAM_BOT_TOKEN")
-const botToken = process.env("TELEGRAM_BOT_TOKEN")
-const bot = new Telegraf(botToken);
+// const bot = new Telegraf(config.get("TELEGRAM_BOT_TOKEN"));
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
 bot.start((ctx) => {
   // Using a more readable multiline array for the keyboard options
@@ -33,9 +31,10 @@ bot.on("text", async (ctx) => {
     default:
       try {
         // Get the user ID as the user identifier
-        // const user = ctx.message.from.id;
-        await replyToUser(ctx, userMessage);
-        // await openai.getChatToGPT(ctx, userMessage, user)
+        const user = ctx.message.from.id;
+
+        // await replyToUser(ctx, userMessage);
+        await openai.getChatToGPT(ctx, userMessage, user)
       } catch (error) {
         await replyToUser(ctx, `Error in sending text: \n${error}`);
       }
