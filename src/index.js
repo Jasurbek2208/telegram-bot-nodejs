@@ -1,6 +1,6 @@
 const { Telegraf, Markup } = require("telegraf");
 // const config = require("config");
-const { openai } = require("./openai")
+// const { openai } = require("./openai")
 const { replyToUser, postPortfolioToServer } = require("./utils/functions");
 
 // const bot = new Telegraf(config.get("TELEGRAM_BOT_TOKEN"));
