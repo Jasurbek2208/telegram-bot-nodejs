@@ -3,8 +3,8 @@ const { Telegraf, Markup } = require("telegraf");
 const config = require("config");
 const axios = require("axios");
 
-const openaiApiKey = config.get("OPENAI_API_KEY");
-const telegramBotToken = config.get("TELEGRAM_BOT_TOKEN");
+const openaiApiKey = process.env.OPENAI_API_KEY;
+const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
 
 const configuration = new Configuration({
   apiKey: openaiApiKey,
