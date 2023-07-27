@@ -1,6 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
 const { Telegraf, Markup } = require("telegraf");
-const config = require("config");
 const axios = require("axios");
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
