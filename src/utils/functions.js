@@ -1,4 +1,5 @@
 const axios = require("axios")
+require('dotenv').config();
 // const config = require("config")
 
 class Generalfunctions {

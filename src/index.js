@@ -1,4 +1,5 @@
 const { Telegraf, Markup } = require("telegraf");
+require('dotenv').config();
 // const config = require("config");
 // const { openai } = require("./openai")
 const { replyToUser, postPortfolioToServer } = require("./utils/functions");
@@ -31,7 +32,7 @@ bot.on("text", async (ctx) => {
     default:
       try {
         // Get the user ID as the user identifier
-        const user = ctx.message.from.id;
+        // const user = ctx.message.from.id;
         await replyToUser(ctx, userMessage);
         // await openai.getChatToGPT(ctx, userMessage, user)
       } catch (error) {
