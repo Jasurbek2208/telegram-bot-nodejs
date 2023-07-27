@@ -4,8 +4,9 @@ require('dotenv').config();
 // const { openai } = require("./openai")
 const { replyToUser, postPortfolioToServer } = require("./utils/functions");
 
-// const bot = new Telegraf(config.get("TELEGRAM_BOT_TOKEN"));
-const bot = new Telegraf(process.env("TELEGRAM_BOT_TOKEN"));
+// const botToken = config.get("TELEGRAM_BOT_TOKEN")
+const botToken = process.env("TELEGRAM_BOT_TOKEN")
+const bot = new Telegraf(botToken);
 
 bot.start((ctx) => {
   // Using a more readable multiline array for the keyboard options
