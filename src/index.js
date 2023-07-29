@@ -48,7 +48,7 @@ bot.on("photo", async (ctx) => {
   
   const caption = ctx.message.caption || "";
   const [title, project_link, github_link] = caption.split("§");
-  const img = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN)}/${file.file_path}`;
+  const img = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}/${file.file_path}`;
 
   const data = { title, img, project_link, github_link };
 
