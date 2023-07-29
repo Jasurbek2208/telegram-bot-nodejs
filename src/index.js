@@ -43,9 +43,10 @@ bot.on("text", async (ctx) => {
 });
 
 bot.on("photo", async (ctx) => {
+  const fileId = ctx.message.photo[0].file_id;
   const caption = ctx.message.caption || "";
   const [title, project_link, github_link] = caption.split("§");
-  const img = ctx.message.photo[ctx.message.photo.length - 1].file_id;
+  const img = await ctx.telegram.getFile(fileId);
 
   const data = { title, img, project_link, github_link };
 
