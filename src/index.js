@@ -1,64 +1,45 @@
-const { Telegraf, Markup } = require("telegraf");
-// const config = require("config");
-const { openai } = require("./openai")
-const { replyToUser, postPortfolioToServer } = require("./utils/functions");
+const { Telegraf } = require('telegraf');
+const schedule = require('node-schedule');
 
-// const bot = new Telegraf(config.get("TELEGRAM_BOT_TOKEN"));
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const bot = new Telegraf('YOUR_TELEGRAM_BOT_TOKEN');
+const sourceChannelUsername = '@source_channel_username';
+const destinationChannelUsername = '@destination_channel_username';
 
-bot.start((ctx) => {
-  // Using a more readable multiline array for the keyboard options
-  const keyboard = Markup.keyboard([
-    ["👋 Say Hello", "⚠️ Help"],
-    ["🔗 Bot Commands"],
-  ]).resize();
+// Middleware to forward posts
+bot.on('text', async (ctx) => {
+    const sourceChannelId = await ctx.telegram.getChat(sourceChannelUsername).then(chat => chat.id);
+    const destinationChannelId = await ctx.telegram.getChat(destinationChannelUsername).then(chat => chat.id);
 
-  ctx.reply("Assalamu Alaykum!", keyboard);
+    if (ctx.message.chat.id === sourceChannelId) {
+        const messageId = ctx.message.message_id;
+        ctx.telegram.forwardMessage(destinationChannelId, sourceChannelId, messageId);
+    }
 });
 
-bot.on("text", async (ctx) => {
-  const userMessage = ctx.message.text;
+async function getUpdates() {
+  const offset = 0; // Set an initial offset
 
-  switch (userMessage) {
-    case "👋 Say Hello":
-      await replyToUser(ctx, "Hello there!");
-      break;
+  //while (true) {
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${offset}&limit=1&timeout=30`);
+      const data = await response.json();
+     // console.log(data)
+      bot.telegram.sendMessage(destinationChannelUsername, data.result[0].message.text);
 
-    case "⚠️ Help":
-      await replyToUser(ctx, "Helping !");
-      break;
+    } catch (error) {
+      console.error('Error fetching updates:', error);
+    }
+  //}
+}
 
-    default:
-      try {
-        // Get the user ID as the user identifier
-        const user = ctx.message.from.id;
-
-        // await replyToUser(ctx, userMessage);
-        await openai.getChatToGPT(ctx, userMessage, user)
-      } catch (error) {
-        await replyToUser(ctx, `Error in sending text:\n${error}`);
-      }
-      break;
-  }
+// Schedule post forwarding every 1 minute
+schedule.scheduleJob('* * * * *', () => {
+  getUpdates()
+    
+    // You can add additional logic here if needed
 });
 
-bot.on("photo", async (ctx) => {
-  const fileId = ctx.message.photo[0].file_id;
-  const file = await ctx.telegram.getFile(fileId);
-  
-  const caption = ctx.message.caption || "";
-  const [title, project_link, github_link] = caption.split("§");
-  const img = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}/${file.file_path}`;
-
-  const data = { title, img, project_link, github_link };
-
-  postPortfolioToServer(ctx, data)
+// Start the bot
+bot.launch().then(() => {
+    console.log('Bot is running');
 });
-
-bot.launch()
-  .then(() => {
-    console.log("Telegram bot is running.");
-  })
-  .catch((err) => {
-    console.error("Error launching Telegram bot:", err);
-  });
