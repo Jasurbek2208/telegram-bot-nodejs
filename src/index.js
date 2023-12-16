@@ -1,9 +1,9 @@
 const { Telegraf } = require('telegraf');
 const schedule = require('node-schedule');
 
-const bot = new Telegraf('YOUR_TELEGRAM_BOT_TOKEN');
-const sourceChannelUsername = '@source_channel_username';
-const destinationChannelUsername = '@destination_channel_username';
+const bot = new Telegraf('5833819728:AAH1dRS8nucWa5_Mh_CmoKUJOIx5uTsYg6I');
+const sourceChannelUsername = '@OrderCrafters';
+const destinationChannelUsername = '@testgroupforbotjasur';
 
 // Middleware to forward posts
 bot.on('text', async (ctx) => {
